@@ -8,7 +8,7 @@ public class ExamenLab {
 	"Anulacion de billetes" };
 	
 	//1. Modificadfojjoai
-	//2. ojasfijsdof
+	//2. Esto es un mensaje de prueba 2
 
 	final static Scanner TECLADO = new Scanner(System.in);
 
@@ -30,7 +30,7 @@ public class ExamenLab {
 				salir = true;
 				break;
 			case 1:
-				venderBilletes(asientos, precio);
+				venderBilletes(asientos, precio); 
 				break;
 			case 2:
 				consultarAsientoLibre(asientos);
