@@ -6,7 +6,7 @@ public class Solucion {
 	final static double DESCUENTO = 0.05;
 	final static String[] MENU = { "Salir", "Venta de billetes", "Consulta de asientos libres",
 	"Anulacion de billetes" };
-	//Hola
+	//Hola 2
 	final static Scanner TECLADO = new Scanner(System.in);
 
 	public static void main(String[] args) {
