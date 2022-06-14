@@ -8,7 +8,7 @@ public class Solucion {
 	"Anulacion de billetes" };
 
 	final static Scanner TECLADO = new Scanner(System.in);
-	//hola
+
 	public static void main(String[] args) {
 		System.out.println("** Bienvenido al sistema de venta de billetes de avion **");
 		int filas = pedirEnteroPositivo("Introduzca la cantidad de filas del avion: ");
