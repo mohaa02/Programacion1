@@ -4,13 +4,13 @@ public class ExamenLab {
 	final static int ASIENTOS_POR_FILA = 4;
 	final static int MAX_BILLETES = 10;
 	final static double DESCUENTO = 0.05;
-	final static String[] MENU = { "Salir", "Venta de billetes", "Consulta de asientos libres",
+	final static String[] MENU = { "Salir", "Venta de billetes", "Consulta de asientos libres",loj
 	"Anulacion de billetes" };
 	
 	//1. Modificadfojjoai
 	//2. Esto es un mensaje de prueba 2
 	//3. Feo soy yo
-
+	//4. Moha confío en ti
 	final static Scanner TECLADO = new Scanner(System.in);
 
 	public static void main(String[] args) {
