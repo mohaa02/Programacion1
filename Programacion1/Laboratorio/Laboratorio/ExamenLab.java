@@ -10,7 +10,7 @@ public class ExamenLab {
 	//1. Modificadfojjoai
 	//2. Esto es un mensaje de prueba 2
 	//3. Feo soy yo
-	//4. Moha confío en ti
+	//4. Moha confío
 	final static Scanner TECLADO = new Scanner(System.in);
 
 	public static void main(String[] args) {
