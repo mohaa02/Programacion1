@@ -7,7 +7,7 @@ public class Solucion {
 	final static String[] MENU = { "Salir", "Venta de billetes", "Consulta de asientos libres",
 	"Anulacion de billetes" };
 	//Hola 8
-	//Hola 4
+	//Hola 6
 	final static Scanner TECLADO = new Scanner(System.in);
 
 	public static void main(String[] args) {
