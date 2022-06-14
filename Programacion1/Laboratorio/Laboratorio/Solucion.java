@@ -8,6 +8,7 @@ public class Solucion {
 	"Anulacion de billetes" };
 	
 	final static Scanner TECLADO = new Scanner(System.in);
+	//Esto es un mensaje
 
 	public static void main(String[] args) {
 		System.out.println("** Bienvenido al sistema de venta de billetes de avion **");
