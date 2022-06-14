@@ -9,6 +9,7 @@ public class Solucion {
 	
 	final static Scanner TECLADO = new Scanner(System.in);
 	//Esto es un mensaje
+	//Mensaje 2
 
 	public static void main(String[] args) {
 		System.out.println("** Bienvenido al sistema de venta de billetes de avion **");
