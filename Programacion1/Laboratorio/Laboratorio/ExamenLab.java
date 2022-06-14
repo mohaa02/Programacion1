@@ -6,6 +6,9 @@ public class ExamenLab {
 	final static double DESCUENTO = 0.05;
 	final static String[] MENU = { "Salir", "Venta de billetes", "Consulta de asientos libres",
 	"Anulacion de billetes" };
+	
+	//1. Modificadfojjoai
+	//2. ojasfijsdof
 
 	final static Scanner TECLADO = new Scanner(System.in);
 
