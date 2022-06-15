@@ -7,10 +7,19 @@ public class ExamenLab {
 	final static String[] MENU = { "Salir", "Venta de billetes", "Consulta de asientos libres",loj
 	"Anulacion de billetes" };
 	
-	//1. Modificadfojjoai
-	//2. Esto es un mensaje de prueba 2
-	//3. Feo soy yo
-	//4. Moha confío
+	//Teniendo en cuenta la solucion de la PRÁCTICA 7, relativaa la implementación de un programa para la gestión de la venta por ventanilla
+	//de billetes de avion de un compañia de bajo coste para un tryecto con las siguientes características:
+	//	El vuelo dispone de F filas de asientos, con 4 asientos por fila.
+	//	El trayecto tiene un precio base P (valor entero).
+	//	Si se compra una fila completa (los 4 asientos correspondientes a una fila) se aplica un descuento del 5% sobre el precio total.
+	//	La ocupación del vuelo se reptesenta mediante una matriz de elemnteos boolean de dimensiones F X 4. Un valor "true" en esta matriz indica que el asiento
+	//	está libre, mientras que un valor "false" indica que el asiento está ocupado.
+	//
+	//	Se pide:
+	//
+	//	EJERCICIO 1:
+	//
+	//	EJERCICIO 2:
 	final static Scanner TECLADO = new Scanner(System.in);
 
 	public static void main(String[] args) {
