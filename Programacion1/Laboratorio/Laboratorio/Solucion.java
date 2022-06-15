@@ -1,200 +1,153 @@
 package Laboratorio;
 import java.util.Scanner;
 public class Solucion {
-	final static int ASIENTOS_POR_FILA = 4;
-	final static int MAX_BILLETES = 10;
-	final static double DESCUENTO = 0.05;
-	final static String[] MENU = { "Salir", "Venta de billetes", "Consulta de asientos libres",
-	"Anulacion de billetes" };
-	
+
 	final static Scanner TECLADO = new Scanner(System.in);
 
 	public static void main(String[] args) {
-		System.out.println("** Bienvenido al sistema de venta de billetes de avion **");
-		int filas = pedirEnteroPositivo("Introduzca la cantidad de filas del avion: ");
-		boolean[][] asientos = crearMatriz(filas, ASIENTOS_POR_FILA, true); // Asiento disponible: true, ocupado: false
-		int precio = pedirEnteroPositivo("Introduzca el precio del billete individual: ");
-		menuPrincipal(asientos, precio);
-	}
+		int[][] asientos = { { 1, 2, 3, 4, 5 }, { 9, 0, 0, 0, 4 }, { 5, 0, 0, 0, 0 }, { 0, 8, 0, 0, 0 } };
+		//int[][] asientos={{1,2,3,4,5}, {9,0,0,0,6}, {7,0,0,0,0}, {0,8,0,0,0}};
+		// COMPLETA EL MAIN
+		int [][] asientosCOV = crearAsientosCovid(asientos);
 
-	private static void menuPrincipal(boolean[][] asientos, int precio) {
-		boolean salir = false;
-		do {
-			mostrarOpcionesMenu(MENU);
-			int opcion = pedirEnteroEnRango("Elija una opcion del menu", 0, MENU.length - 1);
-			switch (opcion) {
-			case 0:
-				salir = true;
-				break;
-			case 1:
-				venderBilletes(asientos, precio);
-				break;
-			case 2:
-				consultarAsientoLibre(asientos);
-				break;
-			case 3:
-				cancelarBillete(asientos);
-				break;
-			default:
-				System.out.println("Opcion desconocida.");
-			}
-		} while (!salir);
-	}
-
-	public static void mostrarOpcionesMenu(String[] texto) {
-		for (int pos = 0; pos < texto.length; pos++)
-			System.out.println(pos + ". " + texto[pos]);
-	}
-
-	private static void venderBilletes(boolean[][] asientos, int precio) {
-		int disponibles = contarValores(asientos, true); // obtener cantidad asientos disponibles
-		if (disponibles > 0) {
-			int max = (disponibles > MAX_BILLETES) ? MAX_BILLETES : disponibles;
-			int billetes = pedirEnteroEnRango("Indique cuantos billetes desea comprar: ", 1, max);
-			mostrarMatriz(asientos);
-			int[] filaAsientos = new int[billetes];
-			for (int i = 0; i < billetes; i++) {
-				filaAsientos[i] = pedirAsientoComprado(asientos, i + 1);
-			}
-			boolean aplicaDescuento = comprobarSiAplicaDescuento(filaAsientos, asientos.length);
-			double precioFinal = calcularPrecioFinal(billetes, precio, aplicaDescuento);
-			mostrarPrecioFinal(precioFinal, aplicaDescuento);
-		} else {
-			System.out.println("Lo sentimos no hay asientos disponibles.");
+		int numAsientosOcupados = contarValoresNoCero(asientos);
+		int numAsientosCOVID = obtenNumAsientCovid(asientosCOV);
+		
+		System.out.println("El número de asientos ocupados es "+numAsientosOcupados+" y el número de asientos posibles covid es "+numAsientosCOVID+" El autobús inicial es: ");
+		mostrarAsientos(asientos);
+		if (numAsientosOcupados<numAsientosCOVID) {
+			System.out.println("Se puede aplicar la normativa COVID.\r\n El autobús COVID inicial es:");
+			mostrarAsientos(asientosCOV);
+			System.out.println("El autobus COVID final es:");
+			asignarAsientosFijos(asientos, asientosCOV);
+			mostrarAsientos(asientosCOV);
+			asignarAsientosNoFijos(asientos, asientosCOV);
+			mostrarAsientos(asientosCOV);
 		}
+
 	}
 
-	private static int pedirAsientoComprado(boolean[][] asientos, int asiento) {
-		boolean comprado = false;
-		int fila;
-		do {
-			fila = pedirEnteroEnRango("Indique la fila del asiento " + asiento + " a comprar: ", 0,
-					asientos.length - 1);
-			int columna = pedirEnteroEnRango("Indique la columna del asiento " + asiento + " a comprar:", 0,
-					asientos[0].length - 1);
-			if (asientos[fila][columna]) {
-				asientos[fila][columna] = false;
-				comprado = true;
-				System.out.printf("Se ha comprado el asiento %d en la fila %d\n", columna, fila);
-			} else {
-				System.out.printf("No se puede comprar el asiento %d en la fila %d, ya esta ocupado\n", columna, fila);
-				System.out.println("Selecione uno entre los disponibles:");
-				mostrarMatriz(asientos);
-			}
-		} while (!comprado);
-		return fila;
-	}
-
-	private static boolean comprobarSiAplicaDescuento(int[] filaAsientos, int cantidadFilas) {
-		boolean aplicaDescuento = false;
-		int[] cuentaAsientosFilas = new int[cantidadFilas];
-		// comprobamos cuantos asientos se han comprado en cada fila del avion
-		// para ello recorremos el vector con las filas de los asientos comprados
-		// tenemos un vector de contadores, en el que cada posicion "i" indica la cantidad
-		// de asientos comprados en la fila "i"
-		for (int i = 0; i < filaAsientos.length; i++) {
-			cuentaAsientosFilas[filaAsientos[i]]++;
-		}
-		for (int i = 0; i < cuentaAsientosFilas.length; i++) {
-			if (cuentaAsientosFilas[i] == ASIENTOS_POR_FILA) { // Se han comprado los 4 asientos de la fila
-				aplicaDescuento = true;
+	// MÉTODOS A DEFINIR
+	
+	/*   Asigna a los clientes en buenas posiciones del autobús inicial a las mismas posiciones en el autobús COVID      */
+	
+	static void asignarAsientosFijos(int[][] asientos, int[][] asientosCOV) {
+		// código
+		for(int i = 0; i<asientosCOV.length; i++) {
+			for (int j = 0; j< asientosCOV[i].length; j++) {
+				if (asientosCOV[i][j]!=-1) {
+					asientosCOV[i][j] = asientos[i][j];
+				}
 			}
 		}
-		return aplicaDescuento;
 	}
-
-	private static double calcularPrecioFinal(int billetes, int precio, boolean aplicaDescuento) {
-		double precioFinal = billetes * precio;
-		if (aplicaDescuento) {
-			precioFinal = precioFinal * (1 - DESCUENTO);
-		}
-		return precioFinal;
-	}
-
-	private static void mostrarPrecioFinal(double precioFinal, boolean aplicaDescuento) {
-		if (aplicaDescuento) {
-			System.out.printf("El precio final, incluyendo descuento por comprar fila completa es: %.2f\n",
-					precioFinal);
-		} else {
-			System.out.printf("El precio final (ningun descuento aplicable) es: %.2f\n", precioFinal);
-		}
-	}
-
-	private static void consultarAsientoLibre(boolean[][] asientos) {
-		int fila = pedirEnteroEnRango("Indique la fila del asiento a consultar: ", 0, asientos.length - 1);
-		int columna = pedirEnteroEnRango("Indique la columna del asiento a consultar ", 0, asientos[0].length - 1);
-		if (asientos[fila][columna]) {
-			System.out.printf("El asiento %d en la fila %d esta libre\n", columna, fila);
-		} else {
-			System.out.printf("El asiento %d en la fila %d esta ocupado\n", columna, fila);
-		}
-	}
-
-	private static void cancelarBillete(boolean[][] asientos) {
-		int fila = pedirEnteroEnRango("Indique la fila del asiento a cancelar: ", 0, asientos.length - 1);
-		int columna = pedirEnteroEnRango("Indique la columna del asiento a cancelar ", 0, asientos[0].length - 1);
-		if (asientos[fila][columna]) {
-			System.out.printf("Error, el asiento %d en la fila %d no esta comprado\n", columna, fila);
-		} else {
-			asientos[fila][columna] = true;
-			System.out.printf("Se ha cancelado la compra del asiento %d en la fila %d\n", columna, fila);
-		}
-	}
-
-	public static int pedirEnteroPositivo(String mensaje) {
-		int num;
-		System.out.print(mensaje);
-		num = TECLADO.nextInt();
-		while (num <= 0) {
-			System.out.print("Error, debe seleccionar un valor entero positivo. Intentelo otra vez... ");
-			num = TECLADO.nextInt();
-		}
-		return num;
-	}
-
-	private static int pedirEnteroEnRango(String mensaje, int limiteInf, int limiteSup) {
-		int num = 0;
-		if (limiteInf > limiteSup)
-			System.out.println("Los valores de los limites definen un intervalo vacio");
-		else {
-			System.out.printf(mensaje + "(valor en rango [%d, %d]) ", limiteInf, limiteSup);
-			num = TECLADO.nextInt();
-			while (num < limiteInf || num > limiteSup) {
-				System.out.printf("Error, debe seleccionar un valor entero en el rango [%d, %d]. Intentelo otra vez... ",
-						limiteInf, limiteSup);
-				num = TECLADO.nextInt();
+	
+	/*	Asigna a los clientes en malas posiciones del autobús inicial a posiciones No covid del autobús COVID*/
+	
+	static void asignarAsientosNoFijos(int[][] asientos, int[][] asientosCOV) {
+		// código
+		for(int i = 0; i<asientos.length; i++) {
+			for (int j = 0; j< asientos[i].length; j++) {
+				if (asientosCOV[i][j]==-1 && asientos[i][j]!=0) {
+					buscarAsientoLibre(asientos[i][j], asientosCOV);
+				}
 			}
 		}
-		return num;
 	}
-
-	private static boolean[][] crearMatriz(int filas, int columnas, boolean b) {
-		boolean[][] matriz = new boolean[filas][columnas];
-		for (int fila = 0; fila < filas; fila++)
-			for (int columna = 0; columna < columnas; columna++)
-				matriz[fila][columna] = b;
-		return matriz;
+	static void buscarAsientoLibre(int identificador, int[][] asientosCOV) {
+		boolean encontrado = false;
+		for(int i = 0; i<asientosCOV.length && !encontrado; i++) {
+			for (int j = 0; j< asientosCOV.length && !encontrado; j++) {
+				if (asientosCOV[i][j]==0) {
+					asientosCOV[i][j] = identificador;
+					encontrado = true;
+				}
+			}
+		}
 	}
+	// otros métodos necesarios ...
+	
+	
+	
+					// MÉTODOS BASE YA DEFINIDOS
+	
+	
+	/* Obtiene una matriz entera con -1 en las posiciones covid y 0 en las no covid */
+	
+	static int[][] crearAsientosCovid(int[][] asientos) {
 
-	private static int contarValores(boolean[][] matriz, boolean b) {
-		int disponibles = 0;
+		int[][] asientosC = new int[asientos.length][asientos[0].length];
+		for (int f = 0; f < asientos.length; f++)
+			for (int c = 0; c < asientos[0].length; c++) {
+				if ((esPar(f) && esPar(c)) || (esImpar(f) && esImpar(c)))
+					asientosC[f][c] = -1;
+				else
+					asientosC[f][c] = 0;
+			}
+		return asientosC;
+	}
+    /* Comprueba si la posición dada por la fila f y la columna c es correcta */
+	
+	static boolean posicionCorrecta(int f, int c) {
+		return !( (esPar(f) && esPar(c)) || (esImpar(f) && esImpar(c)) );
+	}
+	
+	/*  Obtiene el número total de asientos disponibles del autobus según la norma covid*/
+	
+	static int obtenNumAsientCovid(int[][] asientos) {
+		int totalAsientos = asientos.length * asientos[0].length;
+		int totalCovid = totalAsientos / 2;
+		if (esImpar(totalAsientos)) 
+			totalCovid++;
+		return totalCovid;
+	}
+	
+	/* Obtiene el número de asientos ocupados del autobús inicial */
+	private static int contarValoresNoCero(int[][] matriz) {
+		int ocupados = 0;
 		for (int i = 0; i < matriz.length; i++)
 			for (int j = 0; j < matriz[0].length; j++)
-				if (matriz[i][j] == b)
-					disponibles++;
-		return disponibles;
+				if (matriz[i][j] != 0)
+					ocupados++;
+		return ocupados;
+	}
+	/* Comprueba si n es impar */
+	static boolean esImpar(int n) {
+		return n % 2 != 0;
 	}
 
-	public static void mostrarVector(boolean[] vector) {
-		for (int i = 0; i < vector.length; i++)
-			System.out.print(vector[i] + "  ");
+	/* Comprueba si n es par */
+	static boolean esPar(int n) {
+		return n % 2 == 0;
+	}
+
+	/* Muestra con formato el autobús  */
+	private static void mostrarAsientos(int[][] asientos) {
+		System.out.println();
+		System.out.print("     ");
+		for (int i = 0; i < asientos[0].length; i++) {
+			System.out.printf(i + "  ");
+		}
+		System.out.println();
+		System.out.print("     ");
+		for (int i = 0; i < asientos[0].length; i++) {
+			System.out.printf( "---");
+		}
+		System.out.println();
+		for (int fil = 0; fil < asientos.length; fil++) {
+			System.out.print(fil + ": ");
+			for (int col = 0; col < asientos[0].length; col++)
+
+				if (asientos[fil][col] == -1)
+					System.out.printf("%3s", "X");
+				else if (asientos[fil][col] == 0)
+					System.out.printf("%3s", "_");
+				else
+					System.out.printf("%3d", asientos[fil][col]);
+
+			System.out.println();
+		}
 		System.out.println();
 	}
 
-	public static void mostrarMatriz(boolean[][] matriz) {
-		for (int i = 0; i < matriz.length; i++) {
-			System.out.print("Fila " + i + ": ");
-			mostrarVector(matriz[i]);
-		}
-	}
 }
