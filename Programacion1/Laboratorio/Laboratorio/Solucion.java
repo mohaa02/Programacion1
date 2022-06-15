@@ -20,7 +20,6 @@ public class Solucion {
 			mostrarAsientos(asientosCOV);
 			System.out.println("El autobus COVID final es:");
 			asignarAsientosFijos(asientos, asientosCOV);
-			mostrarAsientos(asientosCOV);
 			asignarAsientosNoFijos(asientos, asientosCOV);
 			mostrarAsientos(asientosCOV);
 		}
