@@ -4,7 +4,7 @@ public class ExamenLab {
 	final static int ASIENTOS_POR_FILA = 4;
 	final static int MAX_BILLETES = 10;
 	final static double DESCUENTO = 0.05;
-	final static String[] MENU = { "Salir", "Venta de billetes", "Consulta de asientos libres",loj
+	final static String[] MENU = { "Salir", "Venta de billetes", "Consulta de asientos libres",
 	"Anulacion de billetes" };
 	
 	//Teniendo en cuenta la solucion de la PRÁCTICA 7, relativaa la implementación de un programa para la gestión de la venta por ventanilla
